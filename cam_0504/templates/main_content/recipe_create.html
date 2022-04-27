@@ -1,0 +1,10 @@
+{% extends 'main_content/main_content_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block card_title_public %}
+    Add recipe name
+{% endblock %}
+
+{% block card_body_public %}
+    {% crispy form %}
+{% endblock %}

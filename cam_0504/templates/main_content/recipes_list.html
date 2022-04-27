@@ -1,0 +1,79 @@
+{% extends 'base/base.html' %}
+{% block start %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="col-md">
+                    <div class="card text-center text-black mb-3" id="">
+                        <div class="card-header">
+                            <h2 class="card-title">All recipes</h2>
+                        </div>
+                        <div class="card-body">
+                            <a class="btn btn- mt-2 mb-2 btn-secondary" href="{% url 'recipes main' %}">Go back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if object_list %}
+            <div class="row">
+                <div class="col-md">
+                    <div class="card card-body">
+                        <table class="table table-md table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <th>Raw price</th>
+                                <th>Increase percentage</th>
+                                <th>Price after increase</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            {% for recipe in object_list %}
+                                <tr>
+                                    <td>{{ recipe.name }}</td>
+                                    <td>{{ recipe.price }} Leva</td>
+                                    <td>{{ recipe.increasepercentage.percentage }}%</td>
+                                    <td>{{ recipe.increased_price }} Leva</td>
+                                    <td><a class="btn btn-md btn-secondary"
+                                           href="{% url 'recipe details' recipe.id %}">Details</a></td>
+                                    <td><a class="btn btn-md btn-secondary"
+                                           href="{% url 'recipe add as ingredient' recipe.id %}">Add as ingredient</a>
+                                    </td>
+                                    <td><a class="btn btn-md btn-warning"
+                                           href="{% url 'recipe delete' recipe.id %}">Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                        <div class="card-footer">
+                            <div class="pagination">
+                                <span class="step-links">
+                                    {% if page_obj.has_previous %}
+                                        <a class="btn btn-small btn-secondary" href="?page=1">&laquo; first</a>
+                                        <a class="btn btn-small btn-secondary"
+                                           href="?page={{ page_obj.previous_page_number }}">previous</a>
+                                    {% endif %}
+
+                                    <span class="current">
+                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                    </span>
+
+                                    {% if page_obj.has_next %}
+                                        <a class="btn btn-small btn-secondary"
+                                           href="?page={{ page_obj.next_page_number }}">next</a>
+                                        <a class="btn btn-small btn-secondary"
+                                           href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'accounts/account_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block card_title_acc %}
+    Edit profile
+{% endblock %}
+
+{% block card_body_acc %}
+    {% crispy form %}
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base/base.html' %}
+{% block start %}
+    <div class="container">
+        {% if object_list %}
+            <div class="row">
+                <div class="col-md">
+                    <div class="card text-center text-black mb-3" id="">
+                        <div class="card-header">
+                            <h2 class="card-title">All Ingredients</h2>
+                            <a class="btn btn- mt-2 mb-2 btn-secondary" href="{% url 'ingredients main' %}">Go back</a>
+                        </div>
+                        <div class="card card-body">
+                            <table class="table table-md table-striped">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price in Leva</th>
+                                    <th>For</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                {% for ingredient in object_list %}
+                                    <tr>
+                                        <td>{{ ingredient.name }}</td>
+                                        <td>{{ ingredient.price_per_type }}</td>
+                                        <td>{{ ingredient.type }}</td>
+                                        <td><a class="btn btn-md btn-secondary"
+                                               href="{% url 'ingredient edit' ingredient.id %}">Edit</a>
+                                        </td>
+                                        <td><a class="btn btn-md btn-warning"
+                                               href="{% url 'ingredient delete' ingredient.id %}">Delete</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="pagination">
+                                <span class="step-links">
+                                    {% if page_obj.has_previous %}
+                                        <a class="btn btn-sm btn-secondary" href="?page=1">&laquo; first</a>
+                                        <a class="btn btn-sm btn-secondary"
+                                           href="?page={{ page_obj.previous_page_number }}">previous</a>
+                                    {% endif %}
+
+                                    <span class="current">
+                                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                    </span>
+
+                                    {% if page_obj.has_next %}
+                                        <a class="btn btn-sm btn-secondary"
+                                           href="?page={{ page_obj.next_page_number }}">next</a>
+                                        <a class="btn btn-sm btn-secondary"
+                                           href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

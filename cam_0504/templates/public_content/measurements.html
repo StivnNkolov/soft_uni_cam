@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+{% block start %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h2 class="card-title">Measurements</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Product</th>
+                                <th>Tea-cup</th>
+                                <th>Coffee-cup</th>
+                                <th>Tablespoon</th>
+                                <th>Teaspoon</th>
+                            </tr>
+                            {% for product in products %}
+                                <tr>
+                                    <td>{{ product.name }}</td>
+                                    <td>{% if product.tea_cup_in_grams %}{{ product.tea_cup_in_grams }} gr. {% else %}
+                                        - {% endif %}</td>
+                                    <td>{% if product.coffee_cup_in_grams %}{{ product.coffee_cup_in_grams }}
+                                        gr. {% else %}
+                                        - {% endif %}</td>
+                                    <td>{% if product.tablespoon_in_grams %}{{ product.tablespoon_in_grams }}
+                                        gr. {% else %}
+                                        - {% endif %}</td>
+                                    <td>{% if product.tea_spoon_in_grams %}{{ product.tea_spoon_in_grams }}
+                                        gr. {% else %}
+                                        - {% endif %}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

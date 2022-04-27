@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% block start %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="col-md">
+                    <div class="card text-center text-black  mb-3" id="">
+                        <div class="card-header">
+                            <h2 class="card-title">You have {{ recipes_count }} recipes added</h2>
+                        </div>
+                        <div class="card-body">
+                            <a class="btn btn-md me-1 btn-secondary" href="{% url 'recipe create' %}">Add
+                                Recipe</a>
+                            {% if recipes_count > 0 %}
+                                <a class="btn btn-md me-1 btn-secondary"
+                                   href="{% url 'recipes list' %}">All
+                                    Recipes</a>
+
+                                <a class="btn btn-md btn-warning" href="{% url 'recipe delete all' %}">Delete all
+                                    Recipes</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card mb-3 card-body">
+                    <form method="GET">
+                        {{ recipe_filter.form }}
+                        <button class="btn btn-md btn-secondary" type="submit">Search</button>
+                        <a class="btn btn-md btn-secondary" href="{% url 'recipes main' %}">Clear</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% if recipe_filter.data and found_item %}
+            <div class="row">
+                <div class="col-md">
+                    <div class="card card-body">
+                        <table class="table table-md table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <th>Raw price</th>
+                                <th>Increase percentage</th>
+                                <th>Price after increase</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            {% for recipe in found_item %}
+                                <tr>
+                                    <td>{{ recipe.name }}</td>
+                                    <td>{{ recipe.price }} Leva</td>
+                                    <td>{{ recipe.increasepercentage.percentage }}%</td>
+                                    <td>{{ recipe.increased_price }} Leva</td>
+                                    <td><a class="btn btn-md btn-secondary"
+                                           href="{% url 'recipe details' recipe.id %}">Details</a></td>
+                                    <td><a class="btn btn-md btn-secondary"
+                                           href="{% url 'recipe add as ingredient' recipe.id %}">Add as ingredient</a>
+                                    </td>
+                                    <td><a class="btn btn-md btn-warning"
+                                           href="{% url 'recipe delete' recipe.id %}">Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% elif recipe_filter.data and not found_item %}
+            <div class="col">
+                <div class="card text-center text-black  mb-3" id="">
+                    <div class="card-header">
+                        <h2 class="card-title">No such item</h2>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

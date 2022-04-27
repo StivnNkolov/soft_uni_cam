@@ -1,0 +1,12 @@
+{% extends 'main_content/main_content_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block card_title_public %}
+    Edit ingredient amount
+{% endblock %}
+
+{% block card_body_public %}
+    {% crispy form %}
+    <a class="btn btn-md mt-2 btn-warning" href="{% url 'recipe details' current_recipe_id %}">Go
+        back</a>
+{% endblock %}

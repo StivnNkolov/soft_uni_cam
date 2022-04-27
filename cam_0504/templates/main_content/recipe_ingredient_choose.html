@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %}
+{% block start %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card text-center text-black  mb-3" id="">
+                    <div class="card-header">
+                        <h2 class="card-title">Pick ingredient to add</h2>
+                    </div>
+                    <div class="card card-body">
+                        <form method="get">
+                            {{ ingredient_filter.form }}
+                            <button class="btn btn-md ms-2 me-2 btn-secondary" type="submit">Search</button>
+                            <a class="btn btn-md btn-secondary"
+                               href="{% url 'recipe ingredient choose' current_recipe.id %}">Clear</a>
+                            <a class="btn btn-md ms-2 btn-warning" href="{% url 'recipe details' current_recipe.id %}">Go
+                                back</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if ingredient_filter.data and found_item %}
+            <div class="row">
+                <div class="col-md">
+                    <div class="card card-body">
+                        <table class="table table-md table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <th>Price in Leva</th>
+                                <th>For</th>
+                                <th></th>
+                            </tr>
+                            {% for ingredient in found_item %}
+                                <tr>
+                                    <td>{{ ingredient.name }}</td>
+                                    <td>{{ ingredient.price_per_type }}</td>
+                                    <td>{{ ingredient.type }}</td>
+                                    <td><a class="btn btn-md btn-secondary"
+                                           href="{% url 'recipe ingredient create' ingredient.id %}">Add</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% elif ingredient_filter.data and not found_item %}
+            <div class="col">
+                <div class="card text-center text-black  mb-3" id="">
+                    <div class="card-header">
+                        <h3 class="card-title">No such item</h3>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'accounts/account_base.html' %}
+
+{% block card_title_acc %}
+    Are you sure you want to delete your profile?
+{% endblock %}
+
+{% block card_body_acc %}
+    <form action="{% url 'profile delete' request.user.id %}" method="POST">
+        {{ form }}
+        {% csrf_token %}
+        <input class="btn btn-md me-1 btn-secondary" type="submit" value="Delete">
+        <a class="btn btn-md btn-warning" href="{% url 'profile details' request.user.id %}">Go back</a>
+    </form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'accounts/account_base.html' %}
+{% block card_title_acc %}
+    Profile info
+{% endblock %}
+
+{% block card_body_acc %}
+    <div class="d-flex flex-column">
+        {% if object.first_name and object.last_name %}
+            <h5><u>Name:</u> {{ object.first_name }} {{ object.last_name }}</h5>
+        {% endif %}
+        {% if object.age %}
+            <h5><u>Age:</u> {{ object.age }}</h5>
+        {% endif %}
+        {% if object.city_name %}
+            <h5><u>City name:</u> {{ object.city_name }}</h5>
+        {% endif %}
+        {% if object.email %}
+            <h5><u>Email:</u> {{ object.email }}</h5>
+        {% endif %}
+        {% if object.restaurant_name %}
+            <h5><u>Restaurant name:</u> {{ object.restaurant_name }}</h5>
+        {% endif %}
+    </div>
+    <p class="mt-2">Total Ingredients: {{ ingredients_count }}</p>
+    <p class="mt-2">Total Recipes: {{ recipes_count }}</p>
+    <a href="{% url 'profile edit' request.user.id %}" class="btn btn-md me-1 btn-secondary">Edit</a>
+    <a href="{% url 'change password' request.user.id %}" class="btn btn-md me-1 btn-secondary">Change
+        Password</a>
+    <a href="{% url 'profile delete' request.user.id %}"
+       class="btn btn-md btn-warning">Delete</a>
+{% endblock %}

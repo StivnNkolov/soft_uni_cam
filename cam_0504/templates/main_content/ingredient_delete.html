@@ -1,0 +1,23 @@
+{% extends 'main_content/main_content_base.html' %}
+
+{% block card_title_public %}
+    Are you sure you want to delete: {{ object.name }}
+{% endblock %}
+
+{% block card_body_public %}
+    {% if recipes_containing_this_ingredient_count > 0 %}
+        <p style="color: indianred;">
+            {{ recipes_containing_this_ingredient_count }} recipes contain this ingredient.
+            If you delete it, it will be excluded from these recipes. (If you still want to
+            delete it, don't forget to refresh the recipes price).
+
+        </p>
+    {% endif %}
+    <form action="{% url 'ingredient delete' object.id %}" method="POST">
+        {{ form }}
+        {% csrf_token %}
+        <input class="btn btn-md btn-warning" type="submit" value="Delete">
+        <a class="btn btn-md ms-2 btn-secondary" href="{% url 'ingredients list' %}">Go Back</a>
+    </form>
+{% endblock %}
+

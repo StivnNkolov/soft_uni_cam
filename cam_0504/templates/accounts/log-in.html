@@ -1,0 +1,12 @@
+{% extends 'accounts/account_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block card_title_acc %}
+    Log In
+{% endblock %}
+
+{% block card_body_acc %}
+    {% crispy form %}
+    <a class="btn btn-md btn-warning mt-2" href="{% url 'password_reset' %}">Forgot your
+        password?</a>
+{% endblock %}

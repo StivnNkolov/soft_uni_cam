@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %}
+{% block start %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="col-md">
+                    <div class="card text-center text-black  mb-3" id="">
+                        <div class="card-header">
+                            <h2 class="card-title">You have {{ ingredients_count }} ingredients added</h2>
+                        </div>
+                        <div class="card-body">
+                            <a class="btn btn-md btn-secondary" href="{% url 'ingredient create' %}">Add Ingredient</a>
+                            {% if ingredients_count > 0 %}
+                                <a disabled="disabled" class="btn btn-md btn-secondary"
+                                   href="{% url 'ingredients list' %}">All
+                                    Ingredients</a>
+
+                                <a class="btn btn-md btn-warning" href="{% url 'ingredient delete all' %}">Delete all
+                                    Ingredients</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                <div class="card card-body mb-3">
+                    <form method="GET">
+                        {{ ingredient_filter.form }}
+                        <button class="btn btn-md btn-secondary" type="submit">Search</button>
+                        <a class="btn btn-md btn-secondary" href="{% url 'ingredients main' %}">Clear</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% if ingredient_filter.data and found_item %}
+            <div class="row">
+            <div class="col">
+                <div class="card text-center text-black  mb-3" id="">
+                    <div class="card-header">
+                        <h3 class="card-title">Ingredients found</h3>
+                    </div>
+                    <div class="card card-body">
+                        <table class="table table-lg table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <th>Price in Leva</th>
+                                <th>For</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            {% for ingredient in found_item %}
+                                <tr>
+                                    <td>{{ ingredient.name }}</td>
+                                    <td>{{ ingredient.price_per_type }}</td>
+                                    <td>{{ ingredient.type }}</td>
+                                    <td><a class="btn btn-md btn-secondary"
+                                           href="{% url 'ingredient edit' ingredient.id %}">Edit</a>
+                                    </td>
+                                    <td><a class="btn btn-md btn-warning"
+                                           href="{% url 'ingredient delete' ingredient.id %}">Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% elif ingredient_filter.data and not found_item %}
+            <div class="col-md">
+                <div class="card text-center text-black  mb-3" id="">
+                    <div class="card-header">
+                        <h3 class="card-title">No such item</h3>
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

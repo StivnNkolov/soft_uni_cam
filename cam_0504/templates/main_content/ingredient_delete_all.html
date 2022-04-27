@@ -1,0 +1,20 @@
+{% extends 'main_content/main_content_base.html' %}
+
+{% block card_title_public %}
+    Are you sure you want to delete all ingredients?
+{% endblock %}
+
+{% block card_body_public %}
+    <p style="color: indianred;">
+        If you delete all your ingredients, your recipes will be invalid. If you still want to
+        delete all your Ingredients don't forget to refresh recipe's price!
+    </p>
+
+    <form action="{% url 'ingredient delete all' %}" method="post">
+        {{ form }}
+        {% csrf_token %}
+        <input class="btn btn-md btn-warning" type="submit" value="Delete">
+        <a class="btn btn-md ms-2 btn-secondary" href="{% url 'ingredients main' %}">Go Back</a>
+    </form>
+{% endblock %}
+

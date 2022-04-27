@@ -1,0 +1,11 @@
+{% extends 'main_content/main_content_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block card_title_public %}
+    Edit Ingredient
+{% endblock %}
+
+{% block card_body_public %}
+    {% crispy form %}
+{% endblock %}
+
