@@ -8,9 +8,11 @@ UserModel = get_user_model()
 
 @admin.register(UserModel)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('email', 'is_staff', 'is_superuser',)
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('email', 'date_created')
+    ordering = ('-date_created',)
+    search_fields = ('email',)
