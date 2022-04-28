@@ -157,7 +157,7 @@ class RecipeIngredient(models.Model):
 
 
 class IncreasePercentage(models.Model):
-    PERCENTAGE_MIN_VALUE = 1
+    PERCENTAGE_MIN_VALUE = 0
     PERCENTAGE_DEFAULT_VALUE = 0
 
     recipe = models.OneToOneField(

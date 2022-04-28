@@ -47,6 +47,8 @@ class IngredientCreateForm(CrispyFormHelperMixin, forms.ModelForm):
             Ingredient.objects.get(user=self.user, name=cleaned_data['name'])
         except Ingredient.DoesNotExist:
             pass
+        except KeyError:
+            raise ValidationError("Name can't be empty value")
         else:
             raise ValidationError('Ingredient with that name already exist')
 
