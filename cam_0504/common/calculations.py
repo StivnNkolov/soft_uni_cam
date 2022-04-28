@@ -1,10 +1,15 @@
-def get_price_for_one_unit(type_of_food, price_in_leva):
+def get_price_in_stotinki(price_in_leva):
     price_in_stotinki = price_in_leva * 100
+    return price_in_stotinki
+
+
+def get_price_for_one_unit(type_of_food, price_in_leva):
+    price_in_stotinki = get_price_in_stotinki(price_in_leva)
 
     if type_of_food == 'Kilogram' or type_of_food == 'Liter':
         price_for_one_unit = price_in_stotinki / 1000
         return price_for_one_unit
-    return price_in_leva
+    return price_in_stotinki
 
 
 def increase_value_by_percent(value, percentage):

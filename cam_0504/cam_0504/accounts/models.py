@@ -7,9 +7,6 @@ from cam_0504.accounts.managers import AppUserManager
 from common.validators import only_letters_validator, LettersNumbersWhitespacesValidator
 
 
-# TODO make more abstract the LEttersNUmbers validator.!!
-# TODO remove verbose name because we give it in the form!!!
-
 class AppUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         unique=True,
