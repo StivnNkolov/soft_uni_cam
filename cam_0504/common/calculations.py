@@ -6,29 +6,31 @@ def get_price_in_stotinki(price_in_leva):
 def get_price_for_one_unit(type_of_food, price_in_leva):
     price_in_stotinki = get_price_in_stotinki(price_in_leva)
 
-    if type_of_food == 'Kilogram' or type_of_food == 'Liter':
-        price_for_one_unit = price_in_stotinki / 1000
-        return price_for_one_unit
-    return price_in_stotinki
+    if type_of_food == 'Piece':
+        return price_in_stotinki
+
+    price_for_one_unit = price_in_stotinki / 1000
+    return price_for_one_unit
 
 
-def increase_value_by_percent(value, percentage):
-    if not percentage == 0:
-        value_to_add = value * (percentage / 100)
-        increased_value = value + value_to_add
-        return increased_value
-    return 0
+def increase_value_by_percent(initial_value, percentage):
+    if percentage == 0:
+        return initial_value
+
+    value_to_add = initial_value * (percentage / 100)
+    increased_value = initial_value + value_to_add
+    return increased_value
 
 
-def calculate_price(recipe_increase_percentage, ingredients):
+def calculate_price_return_in_leva(recipe_increase_percentage, ingredients):
     final = 0
-    for el in ingredients:
-        el_price_per_type = el.ingredient.price_per_type
-        el_type = el.ingredient.type
-        el_amount = el.amount
+    for ingredient in ingredients:
+        ingredient_price_per_type = ingredient.ingredient.price_per_type
+        ingredient_type = ingredient.ingredient.type
+        ingredient_amount = ingredient.amount
 
-        price_for_smallest_piece = get_price_for_one_unit(el_type, el_price_per_type)
-        el_final_price = float(el_amount) * float(price_for_smallest_piece)
+        price_for_one_unit = get_price_for_one_unit(ingredient_type, ingredient_price_per_type)
+        el_final_price = float(ingredient_amount) * float(price_for_one_unit)
         final += el_final_price
     end_price = final / 100
     increased_end_price = increase_value_by_percent(end_price, recipe_increase_percentage)

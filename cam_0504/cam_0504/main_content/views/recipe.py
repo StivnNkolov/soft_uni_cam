@@ -8,7 +8,7 @@ from cam_0504.main_content.filters import RecipeFilter
 from cam_0504.main_content.forms import RecipeCreateForm, RecipeDeleteForm, RecipePriceIncreasePercentUpdateForm, \
     IngredientCreateForm
 from cam_0504.main_content.models import Recipe, IncreasePercentage, Ingredient
-from common.calculations import calculate_price
+from common.calculations import calculate_price_return_in_leva
 from common.mixins import AuthenticationRedirectToLoginMixin
 
 
@@ -75,7 +75,7 @@ def recipe_finalise(request, pk):
     recipe = Recipe.objects.prefetch_related('recipeingredient_set').get(id=pk)
     ingredients = recipe.recipeingredient_set.all()
     recipe_increase_percentage = recipe.increasepercentage.percentage
-    price, increased_price = calculate_price(recipe_increase_percentage, ingredients)
+    price, increased_price = calculate_price_return_in_leva(recipe_increase_percentage, ingredients)
     recipe.price = price
     recipe.increased_price = increased_price
     recipe.save()
