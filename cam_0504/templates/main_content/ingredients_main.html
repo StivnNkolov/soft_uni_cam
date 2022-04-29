@@ -11,7 +11,7 @@
                         <div class="card-body">
                             <a class="btn btn-md btn-secondary" href="{% url 'ingredient create' %}">Add Ingredient</a>
                             {% if ingredients_count > 0 %}
-                                <a disabled="disabled" class="btn btn-md btn-secondary"
+                                <a target="_blank" disabled="disabled" class="btn btn-md btn-secondary"
                                    href="{% url 'ingredients list' %}">All
                                     Ingredients</a>
 
@@ -19,7 +19,7 @@
                                     Ingredients</a>
                             {% endif %}
                         </div>
-                    </div>{{ object_list }}
+                    </div>
                 </div>
             </div>
         </div>

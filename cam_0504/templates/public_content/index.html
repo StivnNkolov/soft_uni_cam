@@ -9,6 +9,18 @@
                             <h1 class="card-title">Cook and Math</h1>
                         </div>
                         <div class="card-body">
+                            <div class="card-text">
+                                <p style="font-size: x-large; color: darkolivegreen">
+                                    This is web application, where you can calculate your recipe's value with ease!<br>No
+                                    complicated formulas or subscription fees!
+                                    <br>We don't collect any data for you, and you will never see a single add!<br>If
+                                    you find any bugs or just have some recommendations, contact us at
+                                    cook_and_math_72@gmail.com.<br>
+                                    And don't forget: This is just the beginning.<br>
+                                    WELCOME!
+
+                                </p>
+                            </div>
                             {% if request.user.is_authenticated %}
                                 <a class="btn btn-md btn-secondary" href="{% url 'ingredients list' %}">Ingredients</a>
                                 <a class="btn btn-md btn-secondary" href="{% url 'recipes list' %}">Recipes</a>
@@ -16,46 +28,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <h3 class="text-center">This week recommended recipes</h3>
-        <div class="row row mt-2 row-cols-1 row-cols-md-1 g-4">
-            <div class="card-group">
-                {% for dessert in desserts %}
-                    <div class="card text-center" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ dessert.name }}</h5>
-                            <p class="card-text">{{ dessert.description }}</p>
-                            <a href="{% url 'public recipe details' dessert.id %}" class="btn btn-secondary">Details</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="row row mt-2 row-cols-1 row-cols-md-1 g-4">
-            <div class="card-group">
-                {% for salad in salads %}
-                    <div class="card text-center" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ salad.name }}</h5>
-                            <p class="card-text">{{ salad.description }}</p>
-                            <a href="{% url 'public recipe details' salad.id %}" class="btn btn-secondary">Details</a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="row row mt-2 row-cols-1 row-cols-md-1 g-4">
-            <div class="card-group">
-                {% for dish in main_dishes %}
-                    <div class="card text-center" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ dish.name }}</h5>
-                            <p class="card-text">{{ dish.description }}</p>
-                            <a href="{% url 'public recipe details' dish.id %}" class="btn btn-secondary">Details</a>
-                        </div>
-                    </div>
-                {% endfor %}
             </div>
         </div>
     </div>
