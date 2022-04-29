@@ -50,7 +50,7 @@ class ChangeUserPasswordView(auth_views.PasswordChangeView):
         return super().form_valid(form)
 
 
-class ProfileDetailsView(generic_views.DetailView):
+class ProfileDetailsView(AuthenticationRedirectToLoginMixin, generic_views.DetailView):
     template_name = 'accounts/profile_details.html'
     model = Profile
     context_object_name = 'current_profile'
@@ -79,7 +79,6 @@ class ProfileDeleteView(AuthenticationRedirectToLoginMixin, generic_views.Delete
     form_class = ProfileDeleteForm
     success_url = reverse_lazy('index')
 
-    # TODO do this with signal
     def form_valid(self, form):
         profile = self.object
         user = profile.user

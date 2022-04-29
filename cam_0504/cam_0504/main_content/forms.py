@@ -111,6 +111,8 @@ class RecipeCreateForm(CrispyFormHelperMixin, forms.ModelForm):
             Recipe.objects.get(user=self.user, name=cleaned_data['name'])
         except Recipe.DoesNotExist:
             pass
+        except KeyError:
+            raise ValidationError("Recipe's name can't be empty value")
         else:
             raise ValidationError('Recipe with that name already exist')
 

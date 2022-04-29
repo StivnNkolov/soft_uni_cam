@@ -1,9 +1,11 @@
 from decimal import Decimal
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
 
+from cam_0504 import settings
 from cam_0504.main_content.filters import RecipeFilter
 from cam_0504.main_content.forms import RecipeCreateForm, RecipeDeleteForm, RecipePriceIncreasePercentUpdateForm, \
     IngredientCreateForm
@@ -58,10 +60,10 @@ class RecipeDetailsView(AuthenticationRedirectToLoginMixin, generic_views.Detail
     template_name = 'main_content/recipe_details.html'
     model = Recipe
 
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         recipe = Recipe.objects.get(id=self.kwargs['pk'])
         self.request.session['recipe'] = recipe.id
-        return super().get(request, *args, **kwargs)
+        return super(RecipeDetailsView, self).dispatch(request, *args, **kwargs)
 
 
 class RecipeDeleteView(AuthenticationRedirectToLoginMixin, generic_views.DeleteView):
@@ -71,6 +73,7 @@ class RecipeDeleteView(AuthenticationRedirectToLoginMixin, generic_views.DeleteV
     success_url = reverse_lazy('recipes main')
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def recipe_finalise(request, pk):
     recipe = Recipe.objects.prefetch_related('recipeingredient_set').get(id=pk)
     ingredients = recipe.recipeingredient_set.all()
@@ -120,6 +123,7 @@ class RecipeAddAsIngredientView(AuthenticationRedirectToLoginMixin, generic_view
         return kwargs
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def recipe_delete_all_view(request):
     recipes_for_deletion = Recipe.objects.filter(user=request.user)
     form = RecipeDeleteForm()

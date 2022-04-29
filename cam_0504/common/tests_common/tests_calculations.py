@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from cam_0504.main_content.models import Ingredient, Recipe, RecipeIngredient, IncreasePercentage
 from common.calculations import get_price_in_stotinki, get_price_for_one_unit, increase_value_by_percent, \
     calculate_price_return_in_leva
+from common.functions_for_tests import create_user, ingredient_create, recipe_create, recipe_ingredient_create, \
+    increase_percentage_create
 
 UserModel = get_user_model()
 
@@ -15,45 +17,6 @@ class CalculationsTests(django_tests.TestCase):
     }
 
     TEST_RECIPE_NAME = 'test recipe'
-
-    @staticmethod
-    def __create_recipe_ingredient(recipe, ingredient, amount):
-        recipe_ingredient = RecipeIngredient.objects.create(
-            recipe=recipe,
-            ingredient=ingredient,
-            amount=amount,
-        )
-
-        return recipe_ingredient
-
-    @staticmethod
-    def __create_recipe(name, user):
-        recipe = Recipe.objects.create(
-            name=name,
-            user=user,
-        )
-        return recipe
-
-    def __create_user(self):
-        return UserModel.objects.create(**self.VALID_USER_DATA)
-
-    @staticmethod
-    def __create_ingredient(name, product_type, price, user):
-        ingredient = Ingredient.objects.create(
-            name=name,
-            type=product_type,
-            price_per_type=price,
-            user=user
-        )
-        return ingredient
-
-    @staticmethod
-    def __create_increase_percentage(recipe, percentage):
-        increase_percentage = IncreasePercentage.objects.create(
-            recipe=recipe,
-            percentage=percentage,
-        )
-        return increase_percentage
 
     def test_get_price_in_stotinki_returns_the_actual_amount(self):
         amount_in_leva = 1.23
@@ -134,17 +97,17 @@ class CalculationsTests(django_tests.TestCase):
         self.assertEqual(expected_return_value, increased_end_price)
 
     def test_calculate_price__with_added_ingredients___return_the_right_amount_(self):
-        user = self.__create_user()
+        user = create_user(**self.VALID_USER_DATA)
 
-        ingredient = self.__create_ingredient('test', 'Kilogram', 1, user)
-        ingredient2 = self.__create_ingredient('test1', 'Liter', 1, user)
+        ingredient = ingredient_create('test', 'Kilogram', 1, user)
+        ingredient2 = ingredient_create('test1', 'Liter', 1, user)
 
-        recipe = self.__create_recipe(self.TEST_RECIPE_NAME, user)
+        recipe = recipe_create(self.TEST_RECIPE_NAME, user)
 
-        self.__create_recipe_ingredient(recipe, ingredient, 100)
-        self.__create_recipe_ingredient(recipe, ingredient2, 100)
+        recipe_ingredient_create(recipe, ingredient, 100)
+        recipe_ingredient_create(recipe, ingredient2, 100)
 
-        increase_percentage = self.__create_increase_percentage(recipe, 0)
+        increase_percentage = increase_percentage_create(recipe, 0)
 
         all_ingredients = RecipeIngredient.objects.all()
 
@@ -155,15 +118,15 @@ class CalculationsTests(django_tests.TestCase):
         self.assertEqual(expected_return_value, end_price)
 
     def test_calculate_price__with_added_ingredients_without_added_increase_percentage__return_the_same_end_price(self):
-        user = self.__create_user()
+        user = create_user(**self.VALID_USER_DATA)
 
-        ingredient = self.__create_ingredient('test', 'Kilogram', '1', user)
+        ingredient = ingredient_create('test', 'Kilogram', '1', user)
 
-        recipe = self.__create_recipe(self.TEST_RECIPE_NAME, user)
+        recipe = recipe_create(self.TEST_RECIPE_NAME, user)
 
-        self.__create_recipe_ingredient(recipe, ingredient, 100)
+        recipe_ingredient_create(recipe, ingredient, 100)
 
-        increase_percentage = self.__create_increase_percentage(recipe, 0)
+        increase_percentage = increase_percentage_create(recipe, 0)
 
         all_ingredients = RecipeIngredient.objects.all()
 
@@ -174,17 +137,17 @@ class CalculationsTests(django_tests.TestCase):
         self.assertEqual(expected_return_value, increased_end_price)
 
     def test_calculate_price__with_added_ingredients_with_added_increase_percentage__return_different_values(self):
-        user = self.__create_user()
+        user = create_user(**self.VALID_USER_DATA)
 
-        ingredient = self.__create_ingredient('test', 'Kilogram', 1, user)
-        ingredient2 = self.__create_ingredient('test2', 'Liter', 1, user)
+        ingredient = ingredient_create('test', 'Kilogram', 1, user)
+        ingredient2 = ingredient_create('test2', 'Liter', 1, user)
 
-        recipe = self.__create_recipe(self.TEST_RECIPE_NAME, user)
+        recipe = recipe_create(self.TEST_RECIPE_NAME, user)
 
-        self.__create_recipe_ingredient(recipe, ingredient, 100)
-        self.__create_recipe_ingredient(recipe, ingredient2, 100)
+        recipe_ingredient_create(recipe, ingredient, 100)
+        recipe_ingredient_create(recipe, ingredient2, 100)
 
-        increase_percentage = self.__create_increase_percentage(recipe, 100)
+        increase_percentage = increase_percentage_create(recipe, 100)
 
         all_ingredients = RecipeIngredient.objects.all()
 
@@ -208,15 +171,15 @@ class CalculationsTests(django_tests.TestCase):
         self.assertEqual(expected_return_value, increased_end_price)
 
     def test_calculate_price__with_added_ingredients_of_type_Piece__return_expected_value(self):
-        user = self.__create_user()
+        user = create_user(**self.VALID_USER_DATA)
 
-        ingredient = self.__create_ingredient('test', 'Piece', 1, user)
+        ingredient = ingredient_create('test', 'Piece', 1, user)
 
-        recipe = self.__create_recipe(self.TEST_RECIPE_NAME, user)
+        recipe = recipe_create(self.TEST_RECIPE_NAME, user)
 
-        self.__create_recipe_ingredient(recipe, ingredient, 1)
+        recipe_ingredient_create(recipe, ingredient, 1)
 
-        increase_percentage = self.__create_increase_percentage(recipe, 0)
+        increase_percentage = increase_percentage_create(recipe, 0)
 
         all_ingredients = RecipeIngredient.objects.all()
 
@@ -228,17 +191,17 @@ class CalculationsTests(django_tests.TestCase):
 
     def test_calculate_price__with_added_ingredients_of_all_types_and_added_increase_percentage__return_expected_value(
             self):
-        user = self.__create_user()
+        user = create_user(**self.VALID_USER_DATA)
 
-        ingredient = self.__create_ingredient('test', 'Kilogram', 1, user)
-        ingredient2 = self.__create_ingredient('test2', 'Piece', 1, user)
+        ingredient = ingredient_create('test', 'Kilogram', 1, user)
+        ingredient2 = ingredient_create('test2', 'Piece', 1, user)
 
-        recipe = self.__create_recipe(self.TEST_RECIPE_NAME, user)
+        recipe = recipe_create(self.TEST_RECIPE_NAME, user)
 
-        self.__create_recipe_ingredient(recipe, ingredient, 100)
-        self.__create_recipe_ingredient(recipe, ingredient2, 1)
+        recipe_ingredient_create(recipe, ingredient, 100)
+        recipe_ingredient_create(recipe, ingredient2, 1)
 
-        increase_percentage = self.__create_increase_percentage(recipe, 100)
+        increase_percentage = increase_percentage_create(recipe, 100)
 
         all_ingredients = RecipeIngredient.objects.all()
 

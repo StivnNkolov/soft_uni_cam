@@ -12,6 +12,11 @@ class RecipeIngredientChooseView(AuthenticationRedirectToLoginMixin, generic_vie
     template_name = 'main_content/recipe_ingredient_choose.html'
     model = Ingredient
 
+    def dispatch(self, request, *args, **kwargs):
+        recipe = Recipe.objects.get(id=self.kwargs['pk'])
+        self.request.session['recipe'] = recipe.id
+        return super(RecipeIngredientChooseView, self).dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
         ingredients = Ingredient.objects.filter(user=self.request.user)
         return ingredients
@@ -19,12 +24,11 @@ class RecipeIngredientChooseView(AuthenticationRedirectToLoginMixin, generic_vie
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        recipe = Recipe.objects.get(id=self.kwargs['pk'])
-        self.request.session['recipe'] = recipe.id
+        recipe_id = self.request.session.get('recipe')
         ingredient_filter = IngredientFilter(self.request.GET, queryset=self.get_queryset())
         found_item = ingredient_filter.qs
 
-        context['current_recipe'] = recipe
+        context['current_recipe_id'] = recipe_id
         context['found_item'] = found_item
         context['ingredient_filter'] = ingredient_filter
 

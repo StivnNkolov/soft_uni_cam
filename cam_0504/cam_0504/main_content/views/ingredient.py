@@ -1,14 +1,16 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
 
+from cam_0504 import settings
 from cam_0504.main_content.filters import IngredientFilter
 from cam_0504.main_content.forms import IngredientCreateForm, IngredientEditForm, IngredientDeleteForm
 from cam_0504.main_content.models import Ingredient, Recipe
 from common.mixins import AuthenticationRedirectToLoginMixin
 
 
-class IngredientMainView(generic_views.TemplateView):
+class IngredientMainView(AuthenticationRedirectToLoginMixin, generic_views.TemplateView):
     template_name = 'main_content/ingredients_main.html'
     model = Ingredient
 
@@ -22,6 +24,7 @@ class IngredientMainView(generic_views.TemplateView):
         ingredients_count = self.get_queryset().count()
         found_item = ingredient_filter.qs
 
+        context['object_list'] = self.get_queryset()
         context['found_item'] = found_item
         context['ingredient_filter'] = ingredient_filter
         context['ingredients_count'] = ingredients_count
@@ -74,6 +77,7 @@ class IngredientDeleteView(AuthenticationRedirectToLoginMixin, generic_views.Del
         return context
 
 
+@login_required(login_url=settings.LOGIN_URL)
 def ingredient_delete_all_view(request):
     ingredients_to_delete = Ingredient.objects.filter(user=request.user)
     form = IngredientDeleteForm()

@@ -10,6 +10,8 @@ from cam_0504.accounts.models import Profile
 UserModel = get_user_model()
 
 
+# TODO some mixin for the helper property. Make em all the same
+
 class UserRegisterForm(auth_forms.UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

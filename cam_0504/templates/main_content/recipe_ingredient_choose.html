@@ -13,8 +13,8 @@
                             {{ ingredient_filter.form }}
                             <button class="btn btn-md ms-2 me-2 btn-secondary" type="submit">Search</button>
                             <a class="btn btn-md btn-secondary"
-                               href="{% url 'recipe ingredient choose' current_recipe.id %}">Clear</a>
-                            <a class="btn btn-md ms-2 btn-warning" href="{% url 'recipe details' current_recipe.id %}">Go
+                               href="{% url 'recipe ingredient choose' current_recipe_id %}">Clear</a>
+                            <a class="btn btn-md ms-2 btn-warning" href="{% url 'recipe details' current_recipe_id %}">Go
                                 back</a>
                         </form>
                     </div>
