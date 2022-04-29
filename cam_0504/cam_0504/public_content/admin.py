@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from cam_0504.public_content.models import Product, PublicRecipe, PublicRecipeIngredient
-
+from cam_0504.public_content.models import Product
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -13,11 +12,4 @@ class ProductAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 
-@admin.register(PublicRecipe)
-class PublicRecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type',)
 
-
-@admin.register(PublicRecipeIngredient)
-class PublicRecipeIngredientAdmin(admin.ModelAdmin):
-    pass
