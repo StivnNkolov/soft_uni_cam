@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model, logout
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.views import generic as generic_views
 from django.contrib.auth import views as auth_views
@@ -13,10 +14,11 @@ from common.user_info import get_user_recipes_ingredients_count
 UserModel = get_user_model()
 
 
-class RegisterUserView(generic_views.CreateView):
+class RegisterUserView(SuccessMessageMixin, generic_views.CreateView):
     template_name = 'accounts/register.html'
     success_url = reverse_lazy('index')
     form_class = UserRegisterForm
+    success_message = 'Successfully created account!'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:

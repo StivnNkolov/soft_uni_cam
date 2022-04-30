@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% block start %}
+    {% include 'base/messages.html' %}
     <div class="container">
         <div class="row">
             <div class="col">
@@ -22,8 +23,8 @@
                                 </p>
                             </div>
                             {% if request.user.is_authenticated %}
-                                <a class="btn btn-md btn-secondary" href="{% url 'ingredients list' %}">Ingredients</a>
-                                <a class="btn btn-md btn-secondary" href="{% url 'recipes list' %}">Recipes</a>
+                                <a class="btn btn-md btn-secondary" href="{% url 'ingredients main' %}">Ingredients</a>
+                                <a class="btn btn-md btn-secondary" href="{% url 'recipes main' %}">Recipes</a>
                             {% endif %}
                         </div>
                     </div>

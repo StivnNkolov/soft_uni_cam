@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
@@ -44,11 +45,12 @@ class RecipesListView(AuthenticationRedirectToLoginMixin, generic_views.ListView
         return needed_queryset
 
 
-class RecipeCreateView(AuthenticationRedirectToLoginMixin, generic_views.CreateView):
+class RecipeCreateView(AuthenticationRedirectToLoginMixin, SuccessMessageMixin, generic_views.CreateView):
     template_name = 'main_content/recipe_create.html'
     model = Recipe
     form_class = RecipeCreateForm
     success_url = reverse_lazy('recipes main')
+    success_message = 'Successfully created recipe'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

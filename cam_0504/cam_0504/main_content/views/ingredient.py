@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
+from django.contrib.messages.views import SuccessMessageMixin
 
 from cam_0504 import settings
 from cam_0504.main_content.filters import IngredientFilter
@@ -41,11 +42,12 @@ class IngredientsListView(AuthenticationRedirectToLoginMixin, generic_views.List
         return queryset
 
 
-class IngredientCreateView(AuthenticationRedirectToLoginMixin, generic_views.CreateView):
+class IngredientCreateView(AuthenticationRedirectToLoginMixin, SuccessMessageMixin, generic_views.CreateView):
     template_name = 'main_content/ingredient_create.html'
     model = Ingredient
     form_class = IngredientCreateForm
     success_url = reverse_lazy('ingredients main')
+    success_message = 'Successfully created ingredient'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
