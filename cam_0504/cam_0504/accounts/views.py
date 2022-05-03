@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from cam_0504.accounts.forms import UserRegisterForm, UserLogInForm, ProfileEditForm, ChangeUserPasswordForm, \
     ProfileDeleteForm, CustomPasswordResetForm, CustomSetPasswordForm
 from cam_0504.accounts.models import Profile
-from common.mixins import AuthenticationRedirectToLoginMixin
+from common.mixins import AccountsAuthenticationPermissionMixin
 from common.user_info import get_user_recipes_ingredients_count
 
 UserModel = get_user_model()
@@ -42,7 +42,7 @@ class LogInView(auth_views.LoginView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class ChangeUserPasswordView(auth_views.PasswordChangeView):
+class ChangeUserPasswordView(AccountsAuthenticationPermissionMixin, auth_views.PasswordChangeView):
     template_name = 'accounts/password_change.html'
     success_url = reverse_lazy('index')
     form_class = ChangeUserPasswordForm
@@ -52,7 +52,7 @@ class ChangeUserPasswordView(auth_views.PasswordChangeView):
         return super().form_valid(form)
 
 
-class ProfileDetailsView(AuthenticationRedirectToLoginMixin, generic_views.DetailView):
+class ProfileDetailsView(AccountsAuthenticationPermissionMixin, generic_views.DetailView):
     template_name = 'accounts/profile_details.html'
     model = Profile
     context_object_name = 'current_profile'
@@ -66,7 +66,7 @@ class ProfileDetailsView(AuthenticationRedirectToLoginMixin, generic_views.Detai
         return context
 
 
-class ProfileEditView(AuthenticationRedirectToLoginMixin, generic_views.UpdateView):
+class ProfileEditView(AccountsAuthenticationPermissionMixin, generic_views.UpdateView):
     template_name = 'accounts/profile_edit.html'
     model = Profile
     form_class = ProfileEditForm
@@ -75,7 +75,7 @@ class ProfileEditView(AuthenticationRedirectToLoginMixin, generic_views.UpdateVi
         return reverse_lazy('profile details', kwargs={'pk': self.request.user.id})
 
 
-class ProfileDeleteView(AuthenticationRedirectToLoginMixin, generic_views.DeleteView):
+class ProfileDeleteView(AccountsAuthenticationPermissionMixin, generic_views.DeleteView):
     template_name = 'accounts/profile_delete.html'
     model = Profile
     form_class = ProfileDeleteForm

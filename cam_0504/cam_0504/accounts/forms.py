@@ -15,7 +15,7 @@ class UserRegisterForm(CrispyFormHelperCustomMixin, auth_forms.UserCreationForm)
 
     class Meta:
         model = UserModel
-        fields = ['email', 'password1', 'password2']
+        fields = [UserModel.USERNAME_FIELD, 'password1', 'password2']
 
 
 class UserLogInForm(CrispyFormHelperBuildinMixin, auth_forms.AuthenticationForm):

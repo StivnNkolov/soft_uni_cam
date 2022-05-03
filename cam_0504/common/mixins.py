@@ -1,5 +1,6 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 
 
@@ -8,6 +9,16 @@ class AuthenticationRedirectToLoginMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('log in')
+        return super().dispatch(request, *args, **kwargs)
+
+
+# TODO check is you can do that with some permissions?
+class AccountsAuthenticationPermissionMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('log in')
+        if request.user.id != kwargs['pk']:
+            raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
 
