@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
@@ -61,6 +62,12 @@ class IngredientEditView(AuthenticationRedirectToLoginMixin, generic_views.Updat
     form_class = IngredientEditForm
     success_url = reverse_lazy('ingredients list')
 
+    def dispatch(self, request, *args, **kwargs):
+        ingredient = Ingredient.objects.filter(pk=kwargs['pk'])[0]
+        if ingredient.user.id != request.user.id:
+            raise PermissionDenied
+        return super(IngredientEditView, self).dispatch(request, *args, **kwargs)
+
 
 class IngredientDeleteView(AuthenticationRedirectToLoginMixin, generic_views.DeleteView):
     template_name = 'main_content/ingredient_delete.html'
@@ -77,6 +84,12 @@ class IngredientDeleteView(AuthenticationRedirectToLoginMixin, generic_views.Del
         context['recipes_containing_this_ingredient'] = recipes_containing_this_ingredient
         context['recipes_containing_this_ingredient_count'] = recipes_containing_this_ingredient_count
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        ingredient = Ingredient.objects.filter(pk=kwargs['pk'])[0]
+        if ingredient.user.id != request.user.id:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
 
 
 @login_required(login_url=settings.LOGIN_URL)

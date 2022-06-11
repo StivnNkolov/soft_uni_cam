@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
@@ -65,6 +66,8 @@ class RecipeDetailsView(AuthenticationRedirectToLoginMixin, generic_views.Detail
     def dispatch(self, request, *args, **kwargs):
         recipe = Recipe.objects.get(id=self.kwargs['pk'])
         self.request.session['recipe'] = recipe.id
+        if recipe.user.id != request.user.id:
+            raise PermissionDenied
         return super(RecipeDetailsView, self).dispatch(request, *args, **kwargs)
 
 
@@ -73,6 +76,12 @@ class RecipeDeleteView(AuthenticationRedirectToLoginMixin, generic_views.DeleteV
     model = Recipe
     form_class = RecipeDeleteForm
     success_url = reverse_lazy('recipes main')
+    
+    def dispatch(self, request, *args, **kwargs):
+        recipe = Recipe.objects.get(id=self.kwargs['pk'])
+        if recipe.user.id != request.user.id:
+            raise PermissionDenied
+        return super(RecipeDeleteView, self).dispatch(request, *args, **kwargs)
 
 
 @login_required(login_url=settings.LOGIN_URL)
@@ -123,6 +132,12 @@ class RecipeAddAsIngredientView(AuthenticationRedirectToLoginMixin, generic_view
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+
+    def dispatch(self, request, *args, **kwargs):
+        recipe = Recipe.objects.get(id=self.kwargs['pk'])
+        if recipe.user.id != request.user.id:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
 
 
 @login_required(login_url=settings.LOGIN_URL)

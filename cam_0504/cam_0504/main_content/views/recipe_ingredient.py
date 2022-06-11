@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic as generic_views
@@ -14,6 +15,8 @@ class RecipeIngredientChooseView(AuthenticationRedirectToLoginMixin, generic_vie
 
     def dispatch(self, request, *args, **kwargs):
         recipe = Recipe.objects.get(id=self.kwargs['pk'])
+        if recipe.user.id != request.user.id:
+            raise PermissionDenied
         self.request.session['recipe'] = recipe.id
         return super(RecipeIngredientChooseView, self).dispatch(request, *args, **kwargs)
 
@@ -70,6 +73,12 @@ class RecipeIngredientAddView(AuthenticationRedirectToLoginMixin, generic_views.
         context['current_recipe_id'] = recipe_id
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        ingredient = Ingredient.objects.get(id=kwargs['pk'])
+        if ingredient.user.id != request.user.id:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
 
 class RecipeIngredientEditView(AuthenticationRedirectToLoginMixin, generic_views.UpdateView):
     template_name = 'main_content/recipe_ingr_edit.html'
@@ -87,9 +96,17 @@ class RecipeIngredientEditView(AuthenticationRedirectToLoginMixin, generic_views
         context['current_recipe_id'] = recipe_id
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        recipe_ingredient = RecipeIngredient.objects.get(id=self.kwargs['pk'])
+        if recipe_ingredient.recipe.user.id != request.user.id:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
 
 def recipe_ingredient_delete_view(request, pk):
     recipe_ingredient = RecipeIngredient.objects.get(id=pk)
     recipe = recipe_ingredient.recipe
+    if recipe_ingredient.recipe.user.id != pk:
+        raise PermissionDenied
     recipe_ingredient.delete()
     return redirect('recipe details', recipe.id)
